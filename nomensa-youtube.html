@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Nomensa YouTube</title>
+
+    <link type="text/css" href="nomensa-1ceeea7c182a78ae85a079341300626110175318/core/css/player-core.min.css" rel="stylesheet">
+    <link type="text/css" href="nomensa-1ceeea7c182a78ae85a079341300626110175318/custom/css/player-theme.min.css" rel="stylesheet">
+
+    <!-- Pull in the JQuery libraries from Google, although local versions could be used instead --> 
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript"> 
+      google.load("jquery", "1.3.2"); 
+      google.load("jqueryui", "1.7.2"); 
+    </script>
+
+    <script type="text/javascript" src="nomensa-1ceeea7c182a78ae85a079341300626110175318/core/javascript/swfobject.js"></script> 
+    <script type="text/javascript" src="nomensa-1ceeea7c182a78ae85a079341300626110175318/core/javascript/jquery.player.min.js"></script> 
+  </head>
+  <body>
+    <h1>Nomensa YouTube</h1>
+
+    <div id="video"></div>
+
+    <script type="text/javascript"> 
+      $('video').player({ id: 'yt_player', media: 'xjS6SftYQaQ' });
+    </script>
+  </body>
+</html>
