@@ -24,6 +24,7 @@
 
         player.ready(function() {
           console.log("Player ready");
+          ga.send('send', 'event', 'cjr-videos', 'playerReady');
 
           player.addEventListener("playState", function(state) {
             console.log(state);
