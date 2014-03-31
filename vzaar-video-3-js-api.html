@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Vzaar test - video 3 - JS API</title>
+    <script src="http://player.vzaar.net/libs/flashtakt/client.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <iframe allowFullScreen allowTransparency="true" class="vzaar-video-player" frameborder="0" height="252" id="vzvd-1559015" mozallowfullscreen name="vzvd-1559015" src="http://view.vzaar.com/1559015/player?apiOn=true" title="vzaar video player" type="text/html" webkitAllowFullScreen width="448"></iframe>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-45002715-3', 'gofreerange.com');
+      ga('send', 'pageview');
+    </script>
+
+    <script type="text/javascript">
+      window.addEventListener("load", function() {
+        var player = new vzPlayer("vzvd-1559015");
+
+        player.ready(function() {
+          player.addEventListener("progress", function(state) {
+            console.log(state);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
