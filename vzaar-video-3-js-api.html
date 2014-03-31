@@ -23,7 +23,17 @@
         var player = new vzPlayer("vzvd-1559015");
 
         player.ready(function() {
+          console.log("Player ready");
+
+          player.addEventListener("playState", function(state) {
+            console.log(state);
+          });
+
           player.addEventListener("progress", function(state) {
+            console.log(state);
+          });
+
+          player.addEventListener("interaction", function(state) {
             console.log(state);
           });
         });
