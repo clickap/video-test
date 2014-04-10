@@ -14,5 +14,13 @@
       <source src="http://view.vzaar.com/1570191/video?ren=2" type='video/mp4' data-res="HD">
       <source src="http://view.vzaar.com/1570191/video" type='video/mp4' data-res="SD" data-default="true">
     </video>
+
+    <script>
+      vjs('testVideo', {
+        plugins: {
+          resolutions: true
+        }
+      });
+    </script>
   </body>
 </html>
