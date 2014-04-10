@@ -4,12 +4,15 @@
     <meta charset="utf-8" />
     <title>VideoJS Vzaar-hosted MP4 with both HD and SD</title>
     <link href="video-js-d784f9d0d978c896eee6215ac46e4bf86474db2b/video-js.css" rel="stylesheet" />
+    <link href="video-js-resolutions-02d4c4599ea1a7c41efa70c7ce43beac93ea6545/video-js-resolutions.css" rel="stylesheet" type="text/css" />
     <script src="video-js-d784f9d0d978c896eee6215ac46e4bf86474db2b/video.dev.js"></script>
+    <script src="video-js-resolutions-02d4c4599ea1a7c41efa70c7ce43beac93ea6545/video-js-resolutions.js"></script>
   </head>
   <body>
     <h1>VideoJS Vzaar-hosted MP4 with both HD and SD</h1>
     <video id="testVideo" class="video-js vjs-default-skin" controls preload="auto" poster="http://view.vzaar.com/1570191/image">
-      <source src="http://view.vzaar.com/1570191/video" type='video/mp4' />
+      <source src="http://view.vzaar.com/1570191/video?ren=2" type='video/mp4' data-res="HD">
+      <source src="http://view.vzaar.com/1570191/video" type='video/mp4' data-res="SD" data-default="true">
     </video>
   </body>
 </html>
