@@ -28,9 +28,10 @@
       $('#video').player(
         {
           id: 'jw_player',
-          media: 'http://video-js.zencoder.com/oceans-clip.mp4',
+          media: 'http://futurelearn-video.gofreerange.com/test-video-the-simpsons-movie-trailer-encoded-by-vzaar.mp4',
           url: 'nomensa-1ceeea7c182a78ae85a079341300626110175318/custom/javascript/config/jwplayer-5/core/player.swf',
-          swfCallback : jwPlayerReady
+          swfCallback : jwPlayerReady,
+          playerStyles: { 'width': 646 }
         },
         jwconfig
       );
