@@ -64,7 +64,7 @@ var videojs = vjs;
 window.videojs = window.vjs = vjs;
 
 // CDN Version. Used to target right flash swf.
-vjs.CDN_VERSION = '4.5';
+vjs.CDN_VERSION = '4.4';
 vjs.ACCESS_PROTOCOL = ('https:' == document.location.protocol ? 'https://' : 'http://');
 
 /**
@@ -106,7 +106,7 @@ vjs.options = {
 };
 
 // Set CDN Version of swf
-// The added (+) blocks the replace from changing this 4.5 string
+// The added (+) blocks the replace from changing this 4.4 string
 if (vjs.CDN_VERSION !== 'GENERATED'+'_CDN_VSN') {
   videojs.options['flash']['swf'] = vjs.ACCESS_PROTOCOL + 'vjs.zencdn.net/'+vjs.CDN_VERSION+'/video-js.swf';
 }
@@ -1179,14 +1179,16 @@ vjs.createTimeRange = function(start, end){
 
 /**
  * Simple http request for retrieving external files (e.g. text tracks)
- * @param  {String} url           URL of resource
- * @param  {Function=} onSuccess  Success callback
- * @param  {Function=} onError    Error callback
+ * @param  {String} url              URL of resource
+ * @param  {Function=} onSuccess     Success callback
+ * @param  {Function=} onError       Error callback
+ * @param  {Boolean} withCredentials Flag which allow credentials
  * @private
  */
-vjs.get = function(url, onSuccess, onError){
+vjs.get = function(url, onSuccess, onError, withCredentials){
   var local, request;
 
+  onError = onError || function(){};
   if (typeof XMLHttpRequest === 'undefined') {
     window.XMLHttpRequest = function () {
       try { return new window.ActiveXObject('Msxml2.XMLHTTP.6.0'); } catch (e) {}
@@ -1197,10 +1199,31 @@ vjs.get = function(url, onSuccess, onError){
   }
 
   request = new XMLHttpRequest();
+  if(!('withCredentials' in request) && window.XDomainRequest) {
+    request = new window.XDomainRequest();
+    request.onload = function() {
+      onSuccess(request.responseText);
+    };
+    request.onprogress = function() {};
+    request.onerror = onError;
+    request.ontimeout = onError;
+    try {
+      request.open('GET', url);
+      request.send();
+    } catch (e) {
+      onError(e);
+    }
+    return;
+  }
+
   try {
-    request.open('GET', url);
+    request.open('GET', url, true);
+    if(withCredentials) {
+      request.withCredentials = true;
+    }
   } catch(e) {
     onError(e);
+    return;
   }
 
   local = (url.indexOf('file:') === 0 || (window.location.href.indexOf('file:') === 0 && url.indexOf('http') === -1));
@@ -1210,9 +1233,7 @@ vjs.get = function(url, onSuccess, onError){
       if (request.status === 200 || local && request.status === 0) {
         onSuccess(request.responseText);
       } else {
-        if (onError) {
-          onError();
-        }
+        onError();
       }
     }
   };
@@ -1220,9 +1241,7 @@ vjs.get = function(url, onSuccess, onError){
   try {
     request.send();
   } catch(e) {
-    if (onError) {
-      onError(e);
-    }
+    onError(e);
   }
 };
 
@@ -1306,10 +1325,9 @@ vjs.findPosition = function(el) {
     scrollTop = window.pageYOffset || body.scrollTop;
     top = box.top + scrollTop - clientTop;
 
-    // Android sometimes returns slightly off decimal values, so need to round
     return {
-      left: vjs.round(left),
-      top: vjs.round(top)
+      left: left,
+      top: top
     };
 };
 /**
@@ -3309,16 +3327,7 @@ vjs.Player.prototype.onDurationChange = function(){
   // accidentally cause the stack to blow up.
   var duration = this.techGet('duration');
   if (duration) {
-    if (duration < 0) {
-      duration = Infinity;
-    }
     this.duration(duration);
-    // Determine if the stream is live and propagate styles down to UI.
-    if (duration === Infinity) {
-      this.addClass('vjs-live');
-    } else {
-      this.removeClass('vjs-live');
-    }
   }
 };
 
@@ -4265,7 +4274,6 @@ vjs.ControlBar.prototype.options_ = {
     'timeDivider': {},
     'durationDisplay': {},
     'remainingTimeDisplay': {},
-    'liveDisplay': {},
     'progressControl': {},
     'fullscreenToggle': {},
     'volumeControl': {},
@@ -4278,34 +4286,6 @@ vjs.ControlBar.prototype.createEl = function(){
   return vjs.createEl('div', {
     className: 'vjs-control-bar'
   });
-};
-/**
- * Displays the live indicator
- * TODO - Future make it click to snap to live
- * @param {vjs.Player|Object} player
- * @param {Object=} options
- * @constructor
- */
-vjs.LiveDisplay = vjs.Component.extend({
-  init: function(player, options){
-    vjs.Component.call(this, player, options);
-  }
-});
-
-vjs.LiveDisplay.prototype.createEl = function(){
-  var el = vjs.Component.prototype.createEl.call(this, 'div', {
-    className: 'vjs-live-controls vjs-control'
-  });
-
-  this.contentEl_ = vjs.createEl('div', {
-    className: 'vjs-live-display',
-    innerHTML: '<span class="vjs-control-text">Stream Type </span>LIVE',
-    'aria-live': 'off'
-  });
-
-  el.appendChild(this.contentEl_);
-
-  return el;
 };
 /**
  * Button to toggle between play and pause
