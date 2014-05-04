@@ -1186,6 +1186,7 @@ vjs.createTimeRange = function(start, end){
  * @private
  */
 vjs.get = function(url, onSuccess, onError, withCredentials){
+console.log('withCredentials: ' + withCredentials);
   var local, request;
 
   onError = onError || function(){};
@@ -1217,6 +1218,7 @@ vjs.get = function(url, onSuccess, onError, withCredentials){
   }
 
   try {
+console.log("request.open('GET', url, true);");
     request.open('GET', url, true);
     if(withCredentials) {
       request.withCredentials = true;
